@@ -3,7 +3,7 @@
 namespace DigitalEquation\Helpers\Traits;
 
 use DigitalEquation\Helpers\Exceptions\TablePaginateException;
-use DigitalEquation\Helpers\Facades\PaginateHelper;
+use DigitalEquation\Helpers\Paginate;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -24,7 +24,7 @@ trait TablePaginate
      */
     public function scopeTablePaginate($query, Request $request, $defaultRowsPerPage = 10, $defaultSortColumn = 'id', $defaultSortOrder = 'desc')
     {
-        $driver = PaginateHelper::getDriver();
+        $driver = Paginate::getDriver();
 
         if ($driver === 'react') {
             return $this->reactDriver($query, $request, $defaultRowsPerPage, $defaultSortColumn, $defaultSortOrder);
