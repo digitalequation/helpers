@@ -110,7 +110,7 @@ class InstallCommand extends Command
      */
     private function providersConfig(): array
     {
-        $namespace = Str::replaceLast('\\', '', app()->getAppNamespace());
+        $namespace = Str::replaceLast('\\', '', app()->getNamespace());
         $appConfig = file_get_contents(config_path('app.php'));
 
         $lineEndingCount = [
