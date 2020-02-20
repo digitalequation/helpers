@@ -73,9 +73,9 @@ class HelpersServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->publishes([__DIR__ . '/../../config/helpers.php' => config_path('helpers.php'),], 'helpers-config');
 
-            $this->publishes([__DIR__ . '/../stubs/app/Providers/HelpersServiceProvider.stub' => app_path('Providers/HelpersServiceProvider.php'),], 'helpers-provider');
+            $this->publishes([__DIR__ . '/../../stubs/app/Providers/HelpersServiceProvider.stub' => app_path('Providers/HelpersServiceProvider.php'),], 'helpers-provider');
 
-            $this->publishes([__DIR__ . '/../stubs/app/Providers/ExtendedDatabaseServiceProvider.stub' => app_path('Providers/ExtendedDatabaseServiceProvider.php'),], 'helpers-extended-db-provider');
+            $this->publishes([__DIR__ . '/../../stubs/app/Providers/ExtendedDatabaseServiceProvider.stub' => app_path('Providers/ExtendedDatabaseServiceProvider.php'),], 'helpers-extended-db-provider');
         }
     }
 }
