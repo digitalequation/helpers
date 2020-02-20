@@ -26,31 +26,25 @@ class InstallCommand extends Command
      */
     public function handle(): void
     {
-        if ($this->providerAlreadyInstalled('extended-db')) {
+        if ($this->providersAlreadyInstalled() && !$this->option('force')) {
             $this->line('Extended Database Service Provider is already installed for this project.');
         } else {
             $this->comment('Publishing Extended Database Service Provider...');
             $this->callSilent('vendor:publish', ['--tag' => 'helpers-extended-db-provider']);
 
-            $this->registerExtendedDatabaseServiceProvider();
-        }
-
-        if ($this->providerAlreadyInstalled('helper')) {
-            $this->line('Helper Service Provider is already installed for this project.');
-        } else {
             $this->comment('Publishing Helper Service Provider...');
             $this->callSilent('vendor:publish', ['--tag' => 'helpers-provider']);
 
-            $this->registerHelpersServiceProvider();
+            $this->comment('Publishing Helper Configuration...');
+            $this->callSilent('vendor:publish', ['--tag' => 'helpers-config']);
+
+            $this->registerServiceProviders();
+
+            $this->info('Helper scaffolding installed successfully.');
         }
-
-        $this->comment('Publishing Helper Configuration...');
-        $this->callSilent('vendor:publish', ['--tag' => 'helpers-config']);
-
-        $this->info('Helper scaffolding installed successfully.');
     }
 
-    private function registerExtendedDatabaseServiceProvider()
+    private function registerServiceProviders()
     {
         list($namespace, $appConfig, $eol) = $this->providersConfig();
 
@@ -65,11 +59,6 @@ class InstallCommand extends Command
             "namespace {$namespace}\Providers;",
             file_get_contents(app_path('Providers/ExtendedDatabaseServiceProvider.php'))
         ));
-    }
-
-    private function registerHelpersServiceProvider()
-    {
-        list($namespace, $appConfig, $eol) = $this->providersConfig();
 
         file_put_contents(config_path('app.php'), str_replace(
             "{$namespace}\\Providers\EventServiceProvider::class," . $eol,
@@ -85,24 +74,16 @@ class InstallCommand extends Command
     }
 
     /**
-     * Determine if a service provider is already installed.
+     * Determine if package service providers are already installed.
      *
-     * @param null|string $provider
      * @return bool
      */
-    protected function providerAlreadyInstalled(string $provider): bool
+    protected function providersAlreadyInstalled(): bool
     {
         list($namespace, $appConfig) = $this->providersConfig();
 
-        if ($provider === 'extended-db') {
-            return Str::contains($appConfig, $namespace . '\\Providers\\ExtendedDatabaseServiceProvider::class');
-        }
-
-        if ($provider === 'helper') {
-            return Str::contains($appConfig, $namespace . '\\Providers\\HelpersServiceProvider::class');
-        }
-
-        return false;
+        return Str::contains($appConfig, $namespace . '\\Providers\\ExtendedDatabaseServiceProvider::class') ||
+            Str::contains($appConfig, $namespace . '\\Providers\\HelpersServiceProvider::class');
     }
 
     /**
@@ -115,8 +96,8 @@ class InstallCommand extends Command
 
         $lineEndingCount = [
             "\r\n" => substr_count($appConfig, "\r\n"),
-            "\r"   => substr_count($appConfig, "\r"),
-            "\n"   => substr_count($appConfig, "\n"),
+            "\r" => substr_count($appConfig, "\r"),
+            "\n" => substr_count($appConfig, "\n"),
         ];
 
         $eol = array_keys($lineEndingCount, max($lineEndingCount))[0];
