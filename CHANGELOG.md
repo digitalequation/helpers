@@ -2,5 +2,5 @@
 
 All notable changes to `helper` will be documented in this file
 
-### 1.0.0 - 2020-02-XX
+### 1.0.0 - 2020-02-20
 - initial release
