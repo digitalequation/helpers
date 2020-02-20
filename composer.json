@@ -1,0 +1,62 @@
+{
+  "name": "digitalequation/helpers",
+  "description": "PHP (Laravel) Common Helpers (Internal Use)",
+  "keywords": [
+    "digitalequation",
+    "helpers"
+  ],
+  "homepage": "https://github.com/digitalequation/helpers",
+  "license": "proprietary",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Robert Cristian Chiribuc",
+      "email": "robert.chiribuc@thebug.ro",
+      "role": "Developer"
+    },
+    {
+      "name": "Marcel Mihai Bontaș",
+      "email": "marcel.baker@digitalequation.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.4",
+    "ext-json": "*",
+    "illuminate/support": "^6.11"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^4.5",
+    "phpunit/phpunit": "^8.5"
+  },
+  "autoload": {
+    "files": [
+      "helper/functions.php"
+    ],
+    "psr-4": {
+      "DigitalEquation\\Helpers\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DigitalEquation\\Helpers\\Tests\\": "tests"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "DigitalEquation\\Helpers\\Providers\\HelpersServiceProvider"
+      ],
+      "aliases": {
+        "Helper": "DigitalEquation\\Helpers\\Facade\\HelpersFacade"
+      }
+    }
+  }
+}
