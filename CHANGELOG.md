@@ -2,6 +2,9 @@
 
 All notable changes to `helper` will be documented in this file
 
+### 1.1.0 - 2020-03-13
+- implement relationship searchable for react drive
+
 ### 1.0.6 - 2020-03-05
 - upgrade orchestral/testbench to 5.0
 
