@@ -78,8 +78,18 @@ trait TablePaginate
             $searchable = $this->searchable;
 
             $query = $query->where(function ($q) use ($search, $searchable) {
-                foreach ($searchable as $col) {
-                    $q = $q->orWhere($col, 'LIKE', sprintf('%%%s%%', $search));
+                foreach ($searchable as $column) {
+                    $q = $q->orWhere($column, 'LIKE', sprintf('%%%s%%', $search));
+                }
+
+                if (is_array($this->searchable_relationships)) {
+                    foreach ($this->searchable_relationships as $relationship => $columns) {
+                        foreach ($columns as $column) {
+                            $q = $q->orWhereHas($relationship, function ($q) use ($column, $search) {
+                                $q->where($column, 'LIKE', sprintf('%%%s%%', $search));
+                            });
+                        }
+                    }
                 }
 
                 return $q;
