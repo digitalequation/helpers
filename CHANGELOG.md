@@ -2,6 +2,12 @@
 
 All notable changes to `helper` will be documented in this file
 
+### 1.2.1 - 2020-04-15
+- [misc] simplify code
+
+### 1.2.0 - 2020-04-15
+- add support for orderable relationships on React driver in `TablePaginate`
+
 ### 1.1.0 - 2020-03-13
 - implement relationship searchable for react drive
 
