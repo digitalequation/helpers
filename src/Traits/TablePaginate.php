@@ -14,10 +14,10 @@ trait TablePaginate
      *
      * @param Builder $query
      *
-     * @param Request $request request containing filter / pagination data
+     * @param Request $request            request containing filter / pagination data
      * @param integer $defaultRowsPerPage default rows per page when not provided in request
-     * @param string $defaultSortColumn default column for initial sorting
-     * @param string $defaultSortOrder default order for sorting
+     * @param string  $defaultSortColumn  default column for initial sorting
+     * @param string  $defaultSortOrder   default order for sorting
      *
      * @return mixed
      * @throws TablePaginateException
@@ -42,10 +42,10 @@ trait TablePaginate
      *
      * @param Builder $query
      *
-     * @param Request $request request containing filter / pagination data
+     * @param Request $request            request containing filter / pagination data
      * @param integer $defaultRowsPerPage default rows per page when not provided in request
-     * @param string $defaultSortColumn default column for initial sorting
-     * @param string $defaultSortOrder default order for sorting
+     * @param string  $defaultSortColumn  default column for initial sorting
+     * @param string  $defaultSortOrder   default order for sorting
      *
      * @return mixed
      */
@@ -60,11 +60,7 @@ trait TablePaginate
             $sortBy = $col->field;
 
             if (is_array($this->orderable_relationship) && !empty($this->orderable_relationship)) {
-                foreach ($this->orderable_relationship as $key => $value) {
-                    if ($col->field === $key) {
-                        $sortBy = $value;
-                    }
-                }
+                $sortBy = $this->orderable_relationship[$col->field] ?? $col->field;
             }
         } else {
             $sortBy = $defaultSortColumn;
@@ -75,7 +71,7 @@ trait TablePaginate
         if ($request->has('filters')) {
             foreach ($request->filters as $filter) {
                 $filter = json_decode($filter, true);
-                $query =
+                $query  =
                     is_array($filter['value']) ? $query->whereIn($filter['column']['field'], $filter['value']) :
                         $query->where($filter['column']['field'], $filter['value']);
             }
@@ -83,7 +79,7 @@ trait TablePaginate
 
         // Search
         if ($request->filled('search') && is_array($this->searchable)) {
-            $search = $request->search;
+            $search     = $request->search;
             $searchable = $this->searchable;
 
             $query = $query->where(function ($q) use ($search, $searchable) {
@@ -117,18 +113,18 @@ trait TablePaginate
      *
      * @param Builder $query
      *
-     * @param Request $request request containing filter / pagination data
+     * @param Request $request            request containing filter / pagination data
      * @param integer $defaultRowsPerPage default rows per page when not provided in request
-     * @param string $defaultSortColumn default column for initial sorting
-     * @param string $defaultSortOrder default order for sorting
+     * @param string  $defaultSortColumn  default column for initial sorting
+     * @param string  $defaultSortOrder   default order for sorting
      *
      * @return mixed
      */
     private function vueDriver($query, Request $request, $defaultRowsPerPage, $defaultSortColumn, $defaultSortOrder)
     {
         $rowsPerPage = $request->has('rowsPerPage') ? $request->rowsPerPage : $defaultRowsPerPage;
-        $sortBy = $request->has('sortBy') ? $request->sortBy : $defaultSortColumn;
-        $sortOrder =
+        $sortBy      = $request->has('sortBy') ? $request->sortBy : $defaultSortColumn;
+        $sortOrder   =
             $request->has(['sortBy', 'descending']) ? ($request->descending === 'false' ? 'ASC' : 'DESC') :
                 $defaultSortOrder;
 
@@ -147,7 +143,7 @@ trait TablePaginate
 
         // Search
         if ($request->filled('search') && is_array($this->searchable)) {
-            $search = $request->search;
+            $search     = $request->search;
             $searchable = $this->searchable;
 
             $query = $query->where(function ($q) use ($search, $searchable) {
