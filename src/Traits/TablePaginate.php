@@ -52,15 +52,24 @@ trait TablePaginate
     private function reactDriver($query, Request $request, $defaultRowsPerPage, $defaultSortColumn, $defaultSortOrder)
     {
         $rowsPerPage = $request->filled('pageSize') ? (int)$request->pageSize : $defaultRowsPerPage;
-        $sortOrder = $request->filled('orderDirection') ? $request->orderDirection : $defaultSortOrder;
+        $sortOrder   = $request->filled('orderDirection') ? $request->orderDirection : $defaultSortOrder;
 
         // Order column
         if ($request->filled('orderBy')) {
-            $col = json_decode($request->orderBy);
+            $col    = json_decode($request->orderBy);
             $sortBy = $col->field;
+
+            if (is_array($this->orderable_relationship) && !empty($this->orderable_relationship)) {
+                foreach ($this->orderable_relationship as $key => $value) {
+                    if ($col->field === $key) {
+                        $sortBy = $value;
+                    }
+                }
+            }
         } else {
             $sortBy = $defaultSortColumn;
         }
+
 
         // Filters
         if ($request->has('filters')) {
